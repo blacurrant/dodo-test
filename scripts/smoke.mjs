@@ -1,6 +1,6 @@
 // Smoke test of the production build.
 //   pnpm build && pnpm smoke
-// Tokens (/): tokenizer loads, typing drops real token tiles, billing
+// dodo-play (/): tokenizer loads, typing drops real token tiles, billing
 // moves every token from unbilled to billed. Scrap card (/scrap/): shader renders.
 import { preview } from 'vite';
 import { chromium } from 'playwright';
@@ -14,7 +14,7 @@ const BILLABLE = '.tiles .tile:not(.tile--berry):not(.tile--coin)';
 const check = (ok, msg) => ok || failures.push(msg);
 
 try {
-  // ── Tokens ──
+  // ── dodo-play ──
   const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
   page.on('console', (m) => m.type() === 'error' && failures.push(`tokens console: ${m.text()}`));
   page.on('pageerror', (e) => failures.push(`tokens pageerror: ${e.message}`));

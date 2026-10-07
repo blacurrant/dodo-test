@@ -66,7 +66,7 @@ export const Register = forwardRef<HTMLDivElement, Props>(function Register(
             transition={{ type: 'spring', stiffness: 150, damping: 24 }}
           >
             <header className="rc-head">
-              <div className="rc-brand">Tokens</div>
+              <div className="rc-brand">dodo-play</div>
               <div className="rc-sub">Metered by the token</div>
               <div className="rc-meta">
                 <span>No. {String(receipt.no).padStart(4, '0')}</span>

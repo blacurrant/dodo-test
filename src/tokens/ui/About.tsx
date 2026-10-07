@@ -49,7 +49,7 @@ export function About() {
             ref={panelRef}
             id={id}
             role="dialog"
-            aria-label="About Tokens"
+            aria-label="About dodo-play"
             className="about-panel"
             initial={{ opacity: 0, scale: 0.95, y: -4 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 
 /** Shown under the letter when set. Left empty until the author signs it. */
-const SIGNATURE = '';
+const SIGNATURE = 'Nishant Choudhary';
 
 interface Props {
   open: boolean;
@@ -55,12 +55,12 @@ export function Letter({ open, onClose }: Props) {
           >
             <header className="letter-head">
               <span className="letter-mark" aria-hidden="true">
-                <span>to</span>
-                <span>ken</span>
+                <span>D</span>
+                <span>odo</span>
               </span>
               <div>
                 <h2 id="letter-title" className="letter-title">
-                  Why tokens
+                  Why dodo-play
                 </h2>
                 <p className="letter-sub">A short note for the Dodo Payments team</p>
               </div>
@@ -88,7 +88,7 @@ export function Letter({ open, onClose }: Props) {
                 and nobody ever actually sees one.
               </p>
               <p>
-                <b>Tokens makes them something you can hold.</b> Every word you type is split by a real tokenizer and
+                <b>dodo-play makes them something you can hold.</b> Every word you type is split by a real tokenizer and
                 drops onto the shelf. Each token plays a note, so typing becomes a melody, and there’s always one more
                 thing to find out. “Strawberry” is three tokens at the start of a line and one in the middle. An emoji
                 shatters into raw bytes. The same sentence costs more in Hindi. And because Dodo is a Merchant of Record,

@@ -1,6 +1,8 @@
-# Tokens
+# dodo-play
 
 **Everything you type gets metered.**
+
+By [Nishant Choudhary](https://www.nishant.world/), for the Dodo Payments design engineer brief.
 
 AI products are billed by the token, and that's what Dodo Payments meters for its customers. This toy makes tokens something you can hold.
 

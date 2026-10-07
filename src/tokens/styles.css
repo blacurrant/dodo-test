@@ -419,8 +419,9 @@ kbd {
   background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  /* The blur makes the header its own stacking context; lift it so the About panel sits above the input. */
-  z-index: 3;
+  /* The blur makes the header its own stacking context. It sits above the tiles (5) so a flung
+     tile slides under the nav instead of covering its popovers. */
+  z-index: 6;
 }
 
 .brand {
@@ -526,9 +527,7 @@ kbd {
   width: 360px;
   padding: 16px 16px 14px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: #fff;
   border: 1px solid var(--line-2);
   box-shadow: 0 24px 48px -20px rgba(16, 24, 40, 0.35);
   transform-origin: calc(100% - 24px) -8px;
@@ -713,6 +712,217 @@ kbd {
   box-shadow: 0 0 0 2px #fff;
 }
 
+/* ── Me: the maker's card ─────────────────────────────────────────────── */
+
+.nav-sep {
+  width: 1px;
+  height: 18px;
+  margin: 0 4px;
+  align-self: center;
+  background: var(--line-2);
+}
+
+.me {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.me-button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: transform 140ms var(--ease-out);
+}
+
+.me-button .me-avatar {
+  box-shadow: 0 0 0 1px var(--line-2);
+  transition: box-shadow 160ms var(--ease-out);
+}
+
+.me-button:hover .me-avatar,
+.me-button[data-open] .me-avatar {
+  box-shadow:
+    0 0 0 1px #fff,
+    0 0 0 2.5px var(--ink);
+}
+
+.me-button:active {
+  transform: scale(0.94);
+}
+
+.me-avatar {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--lime);
+  color: var(--ink);
+  font-family: var(--display);
+  font-weight: 650;
+  line-height: 1;
+}
+
+/* The initial and the photo share one cell, so the photo simply covers the initial once it loads. */
+.me-avatar > * {
+  grid-area: 1 / 1;
+}
+
+.me-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.me-panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: -4px;
+  width: 340px;
+  padding: 16px;
+  border-radius: 16px;
+  /* Solid: the header already blurs, and a nested backdrop blur can't see past it. */
+  background: #fff;
+  border: 1px solid var(--line-2);
+  box-shadow: 0 24px 48px -20px rgba(16, 24, 40, 0.35);
+  transform-origin: calc(100% - 20px) -8px;
+  z-index: 20;
+}
+
+.me-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.me-who {
+  min-width: 0;
+}
+
+.me-name {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+
+.me-place {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.me-place .me-icon {
+  width: 13px;
+  height: 13px;
+}
+
+.me-bio {
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.me-links {
+  list-style: none;
+  margin: 14px -6px 0;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 2px;
+}
+
+.me-link {
+  display: grid;
+  grid-template-columns: 16px auto minmax(0, 1fr) 14px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 36px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 13.5px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 140ms var(--ease-out);
+}
+
+.me-link:hover {
+  background: #f2f4f7;
+}
+
+.me-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--ink-3);
+  transition: color 140ms var(--ease-out);
+}
+
+.me-link:hover .me-icon {
+  color: var(--ink);
+}
+
+.me-label {
+  font-weight: 500;
+}
+
+.me-handle[data-copied] {
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 500;
+}
+
+.me-handle {
+  justify-self: end;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-3);
+}
+
+.me-arrow {
+  color: var(--ink-4);
+  font-size: 12px;
+  transition:
+    translate 200ms var(--ease-spring),
+    color 140ms var(--ease-out);
+}
+
+.me-link:hover .me-arrow {
+  color: var(--ink);
+  translate: 2px -2px;
+}
+
+.me-foot {
+  margin: 10px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 11.5px;
+  color: var(--ink-4);
+}
+
 /* ── The letter ───────────────────────────────────────────────────────── */
 
 .letter-scrim {
@@ -730,6 +940,7 @@ kbd {
 .letter {
   width: min(580px, 100%);
   max-height: calc(100vh - var(--header-h) - 42px);
+  max-height: calc(100dvh - var(--header-h) - 42px);
   display: flex;
   flex-direction: column;
   border-radius: 18px;
@@ -861,6 +1072,7 @@ kbd {
 
 .letter-foot {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
@@ -875,6 +1087,7 @@ kbd {
   color: var(--ink-2);
   font-size: 13.5px;
   font-weight: 500;
+  white-space: nowrap;
   text-decoration: underline;
   text-decoration-color: var(--line-2);
   text-underline-offset: 3px;
@@ -894,8 +1107,10 @@ kbd {
 }
 
 .letter-done {
+  flex: none;
   height: 38px;
   padding: 0 16px;
+  white-space: nowrap;
   border: 0;
   border-radius: 10px;
   background: var(--ink);
@@ -1927,6 +2142,9 @@ kbd {
 
 .hints {
   width: min(460px, 100%);
+  max-height: calc(100dvh - 48px);
+  display: flex;
+  flex-direction: column;
   border-radius: 18px;
   background: var(--paper);
   color: var(--ink-2);
@@ -1968,6 +2186,8 @@ kbd {
   list-style: none;
   margin: 0;
   padding: 8px 12px;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .hints-row {
@@ -2105,6 +2325,24 @@ kbd {
 
 /* ── Narrower screens ─────────────────────────────────────────────────── */
 
+/* The shelf sheds words before it runs under the printer: swatch names go first
+   (each swatch keeps its name as a tooltip), then the egg stands in for the label. */
+@media (max-width: 1279px) {
+  .shelf-legend {
+    gap: 6px;
+  }
+
+  .shelf-chip-name {
+    display: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  .shelf-secrets-label {
+    display: none;
+  }
+}
+
 @media (max-width: 980px) {
   .brand-sub,
   .brand-sep {
@@ -2139,6 +2377,14 @@ kbd {
 
   .nav-label {
     display: none;
+  }
+
+  .nav-sep {
+    display: none;
+  }
+
+  .me-panel {
+    width: min(340px, calc(100vw - 32px));
   }
 
   .nav-button {
@@ -2213,6 +2459,45 @@ kbd {
   .shelf {
     padding: 0 var(--gutter);
     overflow-x: auto;
+  }
+
+}
+
+/* Phones on their side and other short screens: keep the two columns, but drop the paper
+   (it can't fit above the printer) and use the compact tile size so the pile has room. */
+@media (min-width: 761px) and (max-height: 560px) {
+  :root {
+    --tile-h: 40px;
+    --tile-font: 19px;
+    --shelf-h: 38px;
+    --header-h: 60px;
+  }
+
+  .paper-window {
+    display: none;
+  }
+
+  .composer-wrap {
+    top: calc(var(--header-h) + 20px);
+  }
+}
+
+/* Small phones (iPhone SE): the "?" makes room for the nav; the hint egg and letter cover it. */
+@media (max-width: 400px) {
+  .about {
+    display: none;
+  }
+
+  .letter-foot {
+    gap: 8px;
+  }
+
+  .letter-link {
+    font-size: 13px;
+  }
+
+  .letter-done {
+    padding: 0 14px;
   }
 }
 

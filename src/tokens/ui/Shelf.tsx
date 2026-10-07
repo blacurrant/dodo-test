@@ -10,15 +10,15 @@ export function Shelf({ found }: { found: Secret[] }) {
       <div className="shelf-legend" aria-label="Tile colour is how rare the token is">
         <span className="shelf-label">Rarity</span>
         {[...LEGEND, FRAGMENT].map((s) => (
-          <span key={s.name} className="shelf-chip">
+          <span key={s.name} className="shelf-chip" title={s.name}>
             <i style={{ background: s.bg }} />
-            {s.name}
+            <span className="shelf-chip-name">{s.name}</span>
           </span>
         ))}
       </div>
       <div className="shelf-secrets">
         <HintEgg found={found} />
-        <span className="shelf-label" title={list} aria-label={`Secret words: ${found.length} of ${SECRETS.length}. ${list}`}>
+        <span className="shelf-label shelf-secrets-label" title={list} aria-label={`Secret words: ${found.length} of ${SECRETS.length}. ${list}`}>
           Secret words
         </span>
         <span className="shelf-pips" aria-hidden="true">

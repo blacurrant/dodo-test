@@ -16,6 +16,8 @@ let dry: GainNode | null = null;
 let wet: GainNode | null = null;
 let muted = false;
 let lastClack = 0;
+/** One short burst of decaying noise, shared by every clack. */
+let clackNoise: AudioBuffer | null = null;
 
 /** Must be called from a user gesture; browsers keep audio locked until then. */
 export function unlockAudio() {
@@ -126,12 +128,16 @@ export function playClack(speed: number, width: number) {
   const t = ctx.currentTime;
   const level = Math.min(1, (speed - 1.2) / 9) * 0.22;
   if (level <= 0.005) return;
-  const len = 0.05;
-  const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * len), ctx.sampleRate);
-  const d = buf.getChannelData(0);
-  for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 6);
+  // Clacks fire from inside the physics step, so the noise is made once and reused;
+  // a slightly different playback rate each time keeps a settling pile from sounding looped.
+  if (!clackNoise) {
+    clackNoise = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.05), ctx.sampleRate);
+    const d = clackNoise.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 6);
+  }
   const src = ctx.createBufferSource();
-  src.buffer = buf;
+  src.buffer = clackNoise;
+  src.playbackRate.value = 0.88 + Math.random() * 0.24;
   const bp = ctx.createBiquadFilter();
   bp.type = 'bandpass';
   bp.frequency.value = 2600 - Math.min(1, width / 220) * 1500;

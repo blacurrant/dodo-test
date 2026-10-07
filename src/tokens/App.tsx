@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { AnimatePresence, MotionConfig, motion, type HTMLMotionProps } from 'motion/react';
+import { AnimatePresence, MotionConfig, motion, useReducedMotion, type HTMLMotionProps } from 'motion/react';
 import { MeshGradient } from '@paper-design/shaders-react';
 import { loadTokenizer, tokenizerReady, type Token } from './tokenizer';
 import { World, type TileInfo } from './world';
@@ -11,6 +11,7 @@ import { Register, type LineItem, type Receipt } from './ui/Register';
 import { Shelf } from './ui/Shelf';
 import { About } from './ui/About';
 import { Letter } from './ui/Letter';
+import { Me } from './ui/Me';
 
 const INTRO = 'Everything you type gets metered.\n';
 /** How long the PAID stamp sits on the receipt before it tears off. */
@@ -47,6 +48,7 @@ export function App() {
   const worldRef = useRef<World | null>(null);
   const introRef = useRef<number | null>(null);
   const itemKey = useRef(0);
+  const still = useReducedMotion();
   const billingRef = useRef(false);
   /** Words dropped while a bill is in progress belong on the next receipt. */
   const queuedRef = useRef<LineItem[]>([]);
@@ -149,13 +151,13 @@ export function App() {
   }, [bill, onBillDone, stopIntro]);
 
   // Browsers keep audio locked until a gesture; the first key or click opens it.
+  // Phones only count the end of a touch as a gesture, so a tap unlocks on pointerup.
   useEffect(() => {
     const unlock = () => unlockAudio();
-    window.addEventListener('pointerdown', unlock);
-    window.addEventListener('keydown', unlock);
+    const events = ['pointerdown', 'pointerup', 'keydown'] as const;
+    for (const e of events) window.addEventListener(e, unlock);
     return () => {
-      window.removeEventListener('pointerdown', unlock);
-      window.removeEventListener('keydown', unlock);
+      for (const e of events) window.removeEventListener(e, unlock);
     };
   }, []);
 
@@ -346,7 +348,10 @@ export function App() {
             colors={['#ffffff', '#e5fbf2', '#e7efff', '#fff3eb', '#ffffff']}
             distortion={0.7}
             swirl={0.15}
-            speed={0.12}
+            speed={still ? 0 : 0.12}
+            // A soft wash: 1x is indistinguishable from retina, at a fraction of the fill cost.
+            minPixelRatio={1}
+            maxPixelCount={1920 * 1200}
           />
           <div className="bg-dots" />
           <div className="bg-rails" />
@@ -358,10 +363,10 @@ export function App() {
           <header className="top">
             <motion.div className="brand" {...enter(0.1, -6)}>
               <span className="brand-mark" aria-hidden="true">
-                <span>to</span>
-                <span>ken</span>
+                <span>D</span>
+                <span>odo</span>
               </span>
-              <h1 className="brand-title">Tokens</h1>
+              <h1 className="brand-title">dodo-play</h1>
               <span className="brand-sep" aria-hidden="true" />
               <p className="brand-sub">Everything you type gets metered.</p>
               <About />
@@ -386,6 +391,8 @@ export function App() {
                 <span className="nav-label">Letter</span>
                 {!letterRead && <span className="nav-unread" aria-label="unread" />}
               </button>
+              <span className="nav-sep" aria-hidden="true" />
+              <Me />
             </motion.nav>
           </header>
 
